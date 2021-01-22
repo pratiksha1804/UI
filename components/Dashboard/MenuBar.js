@@ -5,6 +5,7 @@ import { Button, Menu, Divider, Provider } from 'react-native-paper';
 import { Platform } from 'react-native';
 import MyComponent from '../table/DataTable';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import VendorTable from '../Vendor/vendorDetails';
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
@@ -13,7 +14,8 @@ export class Dashboard extends Component {
         super(props);
         this.state = {
           visible:false,
-          setVisible:false
+          setVisible:false,
+          isredirectToVendor:false,
          };
        }
 
@@ -28,8 +30,16 @@ export class Dashboard extends Component {
             visible : false
         });
     }
+    redirectToVendor = ()=>{
+        this.setState({
+            isredirectToVendor:true
+        })
+    }
 
     render() { 
+        if(this.state.isredirectToVendor) {
+            return <MyComponent/>
+        }
         // const [visible, setVisible] = React.useState(false);
 
         return (
@@ -51,7 +61,8 @@ export class Dashboard extends Component {
                     <TouchableOpacity style={styles.button}>
                          <Menu.Item title="Vendor" 
                           onPress={() =>
-                            this.props.navigation.navigate('vendorTable')
+                            // this.props.navigation.navigate('vendorTable')
+                            this.redirectToVendor()
                             }
                             ></Menu.Item>
                               

@@ -33,7 +33,7 @@ class CreateVendor extends Component {
     "user_gmail":this.state.email_id,
     "user_phone":this.state.phone_no,
     "user_bdate":this.state.birth_date,
-    "user_password":btoa(this.state.password),
+    "user_password":this.state.password,
     "user_photo_url":this.state.file_path,
     "user_pin":"1234"
 });

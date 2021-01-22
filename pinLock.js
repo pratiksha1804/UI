@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
 import { Text, View ,StyleSheet,TouchableOpacity,Button} from 'react-native'
+import { concat } from 'react-native-reanimated';
+import Dashboard from './components/Dashboard/MenuBar';
+import LoginScreen from './LoginScreen';
+let code=''
 export class PinLock extends Component {
     constructor(props){
         super(props);
         this.state={
-            passcode:['','','','']
+            passcode:['','','',''],
+            code:'',
+            isRedirectDashboard:false,
+            isredirectToLogin:false,
+            userdata:JSON.parse(this.props.userdata)
         }
+        console.log("o pin lock data is..."+this.state.userdata.user_name)
     }
     _onPressNumber= num =>{
         console.log(num)
@@ -19,7 +28,11 @@ export class PinLock extends Component {
                 continue;
             }
         }
-        this.setState({passcode:tempcode})
+        this.setState({
+            passcode:tempcode,
+    })
+    code=code+num.toString()
+    console.log("code is"+code)
     }
 
     _onPressCancel =()=>{
@@ -35,8 +48,45 @@ export class PinLock extends Component {
         }
         this.setState({passcode:tempcode})
     }
+    createUser(){
+        console.log("user is "+this.state.userdata )
+        let data=null
+       data=JSON.stringify({
+         ...this.state.userdata,
+         user_pin:code
+     });
+    console.log("pinlock data is..."+data)
+     
+     fetch('http://localhost:5001/api/userCreate',{
+       method: 'POST',
+       body: data
+     }).then(response => {
+       console.log("response is........"+response)
+        if(response.status === 201){
+            this.setState({
+                isRedirectDashboard:true
+         })
+     }
+       else{
+          alert("error occured")
+     }
+     
+     })
+      }
+
+      redirectToLogin = ()=>{
+          this.setState({
+              isredirectToLogin:true
+          })
+      }
 
     render() {
+        if(this.state.isRedirectDashboard) {
+            return <Dashboard/>
+        }
+        if(this.state.isredirectToLogin){
+            return <LoginScreen/>
+        }
         let numbers =[
             {id:1 },
             {id:2 },
@@ -86,18 +136,21 @@ export class PinLock extends Component {
            </View>
            <View style={{ flexDirection: 'row',paddingTop:20,justifyContent:"center" }}>
             <View style={styles.buttonText1}>
-            <Button
-            title="Cancel"
-            onPress={() => this.props.navigation.navigate('Login')}
-
-            />
+            <TouchableOpacity
+                    onPress={() => this.redirectToLogin}
+            >
+            <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+            
             </View>
             <View style={styles.buttonText2}>
-            <Button
-            title="Confirm"
-            onPress={() => this.props.navigation.navigate('createVendor')}
-
-            />
+            <TouchableOpacity
+         onPress={() =>
+          this.createUser()
+        }
+        >
+        <Text style={styles.buttonText}>Confirm</Text>
+        </TouchableOpacity>
             </View>
 
             </View>

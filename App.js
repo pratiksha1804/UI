@@ -17,7 +17,7 @@ import ExampleFour from './screens/vendorDetails'
 import VendorDetails from './components/Vendor/vendorDetails';
 import CreateDeliveryChallan from './components/DeliveryChallan/CreateDeliveryChallan';
 import MyComponent from './components/table/DataTable'
-import MyTable from './components/table/MyTable'
+// import MyTable from './components/table/MyTable'
 // import Demo from './components/table/demo'
 // import VendorTable from './components/table/Table'
 const Stack = createStackNavigator();
@@ -47,7 +47,7 @@ export default function App() {
           />
             <Stack.Screen
             name="vendorTable"
-            component={MyTable}
+            component={MyComponent}
           />
            <Stack.Screen
             name="createChallan"
